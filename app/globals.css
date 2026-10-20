@@ -1,0 +1,119 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: var(--font-manrope), system-ui, sans-serif;
+
+  /* paleta de saúde: fundo menta frio, tinta preto-esverdeada, verde-azulado cirúrgico (mata) como cor da marca; laranja e amarelo só como acentos */
+  --color-fundo: #eef5f3;
+  --color-superficie: #ffffff;
+  --color-borda: #d8e6e2;
+  --color-texto: #0f2321;
+  --color-suave: #5f7370;
+  --color-tinta: #0f2321;
+  --color-tinta-2: #1b3a37;
+  --color-acento: #e4552b;
+  --color-acento-escuro: #c7431c;
+  --color-acento-claro: #fbe6dc;
+  --color-sol: #f4c43a;
+  --color-sol-escuro: #8a5a00;
+  --color-sol-claro: #fdf1c6;
+  --color-mata: #0b7a73;
+  --color-mata-escuro: #0e5e63;
+  --color-mata-claro: #d9efeb;
+  --color-perigo: #c23b2e;
+  --color-perigo-claro: #fbe3df;
+
+  --ease-saida: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-gaveta: cubic-bezier(0.32, 0.72, 0, 1);
+
+  --radius-cartao: 24px;
+  --shadow-card: 0 1px 2px rgb(15 35 33 / 0.04), 0 8px 24px -12px rgb(15 35 33 / 0.10);
+  --shadow-elevado: 0 2px 6px rgb(15 35 33 / 0.05), 0 24px 48px -16px rgb(15 35 33 / 0.22);
+  --shadow-trilho: 0 20px 40px -16px rgb(15 35 33 / 0.45);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  /* manchas de cor nos cantos: verde-azulado, azul hospitalar e menta */
+  background:
+    radial-gradient(720px 420px at 8% -6%, rgb(11 122 115 / 0.16), transparent 70%),
+    radial-gradient(640px 400px at 100% 0%, rgb(56 189 248 / 0.14), transparent 70%),
+    radial-gradient(600px 360px at 50% 110%, rgb(94 234 212 / 0.14), transparent 70%),
+    var(--color-fundo);
+  background-attachment: fixed;
+  color: var(--color-texto);
+  font-feature-settings: "ss01", "cv11";
+}
+
+/* Cartões: branco de canto grande e borda quase invisível; variantes sólidas para status */
+.cartao { border-radius: var(--radius-cartao); background: var(--color-superficie); border: 1px solid color-mix(in oklab, var(--color-borda) 70%, transparent); box-shadow: var(--shadow-card); }
+.cartao-tinta { border-radius: var(--radius-cartao); background: var(--color-tinta); color: #fff; }
+.cartao-sol { border-radius: var(--radius-cartao); background: var(--color-sol); color: var(--color-tinta); }
+.cartao-mata { border-radius: var(--radius-cartao); background: var(--color-mata); color: #fff; }
+.cartao-acento { border-radius: var(--radius-cartao); background: var(--color-acento); color: #fff; }
+
+/* Rótulo pequeno em caixa alta */
+.rotulo { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-suave); }
+
+/* Número grande dos indicadores */
+.numero { font-variant-numeric: tabular-nums; letter-spacing: -0.03em; font-weight: 700; }
+
+/* Vidro da barra superior */
+.vidro { background: color-mix(in oklab, var(--color-fundo) 86%, transparent); backdrop-filter: blur(18px) saturate(1.4); -webkit-backdrop-filter: blur(18px) saturate(1.4); transition: background-color 300ms ease; }
+/* encolhida ao rolar, a barra fica quase opaca para o título grande da página não vazar por trás */
+.vidro[data-rolou="true"] { background: color-mix(in oklab, var(--color-fundo) 97%, transparent); }
+
+/* Blocos que abrem e fecham animando a altura: <div class="desdobra" data-aberta><div>...</div></div> */
+.desdobra { display: grid; grid-template-rows: 1fr; transition: grid-template-rows 320ms var(--ease-saida); }
+.desdobra[data-aberta="false"] { grid-template-rows: 0fr; }
+.desdobra > * { min-height: 0; overflow: hidden; }
+
+.gradiente-marca { background-image: linear-gradient(135deg, #e4552b 0%, #f4c43a 100%); }
+/* Login: verde-azulado de traje cirúrgico, azul hospitalar no canto */
+.gradiente-saude { background-image: linear-gradient(150deg, #0e5e63 0%, #0b7a73 45%, #0f8f82 100%); }
+.gradiente-acento { background-image: linear-gradient(135deg, #ff7a4d 0%, #e4552b 55%, #c7431c 100%); }
+.texto-marca { background-image: linear-gradient(135deg, #e4552b 0%, #8a5a00 100%); background-clip: text; color: transparent; }
+
+/* Entrada escalonada sem JS: style={{"--i": n}} */
+@keyframes entrar { from { opacity: 0; transform: translateY(10px); } }
+.entrar { animation: entrar 480ms var(--ease-saida) backwards; animation-delay: calc(var(--i, 0) * 45ms); }
+
+/* Botões e cartões: resposta ao toque */
+.pressionavel { transition: transform 160ms var(--ease-saida), box-shadow 200ms ease, border-color 200ms ease, background-color 200ms ease, color 200ms ease; }
+.pressionavel:active { transform: scale(0.97); }
+@media (hover: hover) and (pointer: fine) {
+  .levanta:hover { transform: translateY(-3px); box-shadow: var(--shadow-elevado); }
+  .levanta:active { transform: translateY(0) scale(0.98); }
+}
+
+/* Gaveta lateral */
+.gaveta { transform: translateX(104%); transition: transform 260ms var(--ease-saida); }
+.gaveta[data-aberta="true"] { transform: translateX(0); transition: transform 460ms var(--ease-gaveta); }
+.veu { opacity: 0; pointer-events: none; transition: opacity 260ms ease; }
+.veu[data-aberta="true"] { opacity: 1; pointer-events: auto; }
+
+/* Aviso (toast) */
+.aviso { transition: opacity 300ms ease, transform 300ms var(--ease-saida); @starting-style { opacity: 0; transform: translate(-50%, 16px) scale(0.96); } }
+
+/* Login: fundo vivo */
+@keyframes flutuar { 0%, 100% { transform: translate(0, 0) scale(1); } 50% { transform: translate(30px, -40px) scale(1.08); } }
+.bolha { animation: flutuar 14s ease-in-out infinite; }
+@keyframes pulsar { 0% { box-shadow: 0 0 0 0 rgb(11 122 115 / 0.45); } 100% { box-shadow: 0 0 0 10px rgb(11 122 115 / 0); } }
+.pulso { animation: pulsar 2s ease-out infinite; animation-delay: calc(var(--i, 0) * -350ms); }
+
+/* Barra de rolagem discreta */
+.rolagem-fina { scrollbar-width: thin; scrollbar-color: var(--color-borda) transparent; }
+.sem-rolagem { scrollbar-width: none; }
+.sem-rolagem::-webkit-scrollbar { display: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .entrar { animation: none; }
+  .desdobra { transition: none; }
+  .bolha, .pulso { animation: none; }
+  .gaveta, .gaveta[data-aberta="true"] { transition: opacity 200ms ease; }
+  .pressionavel:active, .levanta:hover { transform: none; }
+  html { scroll-behavior: auto; }
+}
+
+::selection { background: #d9efeb; }
