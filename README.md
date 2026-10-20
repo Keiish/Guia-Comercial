@@ -1,6 +1,6 @@
 # Guia Comercial — visual v2
 
-Projeto `Guia-Comercial` com a interface refeita: fundo creme, navegação em pílulas, trilho de ações flutuante, cartões de canto grande e animações com [Motion](https://motion.dev). Dados, regras de convênio e permissões são os mesmos do projeto original (`lib/`).
+Projeto `Guia-Comercial` com a interface refeita: fundo creme, navegação em pílulas, trilho de ações flutuante, cartões de canto grande e animações com [Motion](https://motion.dev).
 
 ## Funcionalidades
 - 🔍 Busca rápida de procedimentos, convênios e médicos em tempo real
